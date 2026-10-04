@@ -14,9 +14,16 @@ export const BUSINESS = {
     { days: "I–V", time: "08:00–20:00" },
     { days: "VI–VII", time: "09:00–19:00" },
   ],
-  // Tik realiai egzistuojantys profiliai. Facebook nuoroda senojoje
-  // svetainėje buvo tuščia – ją pridėti, kai užsakovas pateiks adresą.
-  social: [{ label: "Instagram", href: "https://www.instagram.com/motivus_lt" }],
+  social: [
+    {
+      label: "Facebook",
+      href: "https://www.facebook.com/profile.php?id=61581500312310",
+    },
+    {
+      label: "Instagram",
+      href: "https://www.instagram.com/motivus_automobiliu_supirkimas/",
+    },
+  ],
 };
 
 /**

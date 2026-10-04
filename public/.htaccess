@@ -1,0 +1,59 @@
+# MOTIVUS – statinio puslapio nustatymai bendrajam hostingui (Apache / LiteSpeed).
+
+Options -Indexes
+DirectoryIndex index.html
+
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # 1. Visada HTTPS ir be „www“ (sutampa su canonical adresu).
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^(.*)$ https://motivus.lt/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+  # 2. Senieji WordPress adresai – kad neliktų 404 ir nedingtų SEO svoris.
+  RewriteRule ^duk/?$                      /#duk            [R=301,L,NE]
+  RewriteRule ^kontaktai/?$                /#kontaktai      [R=301,L,NE]
+  RewriteRule ^suzinoti-kaina/?$           /                [R=301,L]
+  RewriteRule ^automobiliu-supirkimas/?$   /                [R=301,L]
+  RewriteRule ^uzklausa-gauta/?$           /                [R=301,L]
+
+  # 3. WordPress palikimas – nukreipiame į pradžią.
+  RewriteRule ^(wp-admin|wp-login\.php|wp-json|xmlrpc\.php|feed|comments/feed) /  [R=301,L]
+  RewriteRule ^wp-content/                 /                [R=301,L]
+</IfModule>
+
+# Talpyklos taisyklės. Assets failų pavadinimuose yra hash'as, todėl juos
+# galima kešuoti ilgam; HTML turi būti visada šviežias.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html                "access plus 0 seconds"
+  ExpiresByType text/css                 "access plus 1 year"
+  ExpiresByType application/javascript   "access plus 1 year"
+  ExpiresByType image/jpeg               "access plus 6 months"
+  ExpiresByType image/png                "access plus 6 months"
+  ExpiresByType image/webp               "access plus 6 months"
+  ExpiresByType image/svg+xml            "access plus 6 months"
+  ExpiresByType video/mp4                "access plus 6 months"
+  ExpiresByType font/woff2               "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml \
+    application/javascript application/json image/svg+xml
+</IfModule>

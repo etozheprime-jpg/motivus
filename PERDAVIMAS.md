@@ -10,7 +10,10 @@ ir kaip viską prižiūrėti.
 | Dalis | Būsena |
 |---|---|
 | Vienas puslapis (hero, privalumai, procesas, geografija, atsiliepimai, DUK, kontaktai) | ✅ |
-| Užklausos forma modaliniame lange, 7 laukai + nuotraukos | ✅ frontend veikia |
+| Užklausos forma modaliniame lange, 7 laukai + nuotraukos | ✅ |
+| Užklausų priėmimas (PHP, el. paštas + CSV žurnalas) | ✅ reikia patikrinti serveryje |
+| Teisiniai puslapiai (privatumo, slapukų, sąlygos) | ✅ |
+| Socialinių tinklų nuorodos | ✅ |
 | Vaizdo įrašo fonas (H.264, 720×1280, 8,5 MB) + pirmo kadro nuotrauka | ✅ |
 | Telefonas, WhatsApp, Viber, Telegram | ✅ |
 | Mobilioji ir planšetės versijos | ✅ |
@@ -23,12 +26,25 @@ ir kaip viską prižiūrėti.
 
 ## 2. Ką BŪTINA padaryti prieš paleidžiant
 
-### 2.1. Prijungti užklausų gavimą ⚠️ svarbiausia
+### 2.1. Užklausų gavimas ⚠️ patikrinkite pirmiausia
 
-Dabar forma veikia **demo režimu** — ji atlieka visą patikrą, parodo sėkmės
-pranešimą, bet **užklausa niekur neišsiunčiama**.
+Jei svetainė keliama į **Hostinger ar bet kurį PHP hostingą**, viskas jau
+paruošta: `api/lead.php` priima užklausą, išsiunčia ją el. paštu su
+nuotraukomis ir papildomai įrašo į CSV žurnalą aplanke `motivus-leads/`
+(už `public_html` ribų). Diegimo eiga – faile `DIEGIMAS-HOSTINGER.md`.
 
-Sukurkite `.env` failą projekto šaknyje:
+Faile `api/lead.php` reikia patikrinti dvi eilutes:
+
+```php
+$TO   = 'info@motivus.lt';      // kam ateina užklausos
+$FROM = 'noreply@motivus.lt';   // turi būti REALI šio domeno dėžutė
+```
+
+**Po įkėlimo būtinai išsiųskite testinę užklausą** (taip pat ir su nuotrauka)
+ir įsitikinkite, kad laiškas atėjo. Tai vienintelė dalis, kurios neįmanoma
+patikrinti iš anksto – ji priklauso nuo hostingo pašto nustatymų.
+
+Jei norite siųsti į CRM ar webhook vietoje el. pašto, pakeiskite `.env.production`:
 
 ```
 VITE_LEAD_ENDPOINT=https://jusu-endpointas
@@ -38,9 +54,7 @@ VITE_LEAD_METHOD=POST
 Tinka bet kas, kas priima `multipart/form-data`: savas backend, Make / Zapier
 webhook, Google Apps Script į Sheets, CRM. Laukai: `source`, `submittedAt`,
 `makeModel`, `year`, `fuel`, `comment`, `desiredPrice`, `city`, `phone`,
-`photo_1`…`photo_8`.
-
-Po pakeitimo — perkompiliuoti (`npm run build`).
+`photo_1`…`photo_8`. Po pakeitimo — perkompiliuoti (`npm run build`).
 
 ### 2.2. Teisiniai puslapiai
 
@@ -78,8 +92,14 @@ slapukų**, todėl juostos nereikia.
 
 ### 2.4. Socialinių tinklų nuorodos
 
-`src/lib/content.ts` → `BUSINESS.social` — dabar ten bendri Facebook ir
-Instagram adresai. Įrašykite tikrus.
+✅ Sutvarkyta. Poraštėje – tikri profiliai:
+
+- Facebook: `facebook.com/profile.php?id=61581500312310`
+- Instagram: `instagram.com/motivus_automobiliu_supirkimas`
+
+Jie taip pat įrašyti į `schema.org` `sameAs` lauką (`index.html`), kad Google
+susietų svetainę su profiliais. Keisti – `src/lib/content.ts` → `BUSINESS.social`
+ir `index.html`.
 
 ### 2.5. Telegram
 
