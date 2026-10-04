@@ -1,0 +1,376 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Montserrat", "Helvetica Neue", sans-serif;
+  --font-sans: "Nunito", system-ui, sans-serif;
+
+  /* Warm graphite, never navy */
+  --color-ink-900: #0a0b0d;
+  --color-ink-800: #0e0f12;
+  --color-ink-700: #14161a;
+  --color-ink-600: #1b1e23;
+  --color-ink-500: #262a31;
+
+  --color-chalk: #f4f4f1;
+  --color-chalk-dim: #a9aeb4;
+  --color-chalk-faint: #878c96;
+
+  /* Firminė MOTIVUS žalia (paimta iš logotipo) */
+  --color-signal: #aeff3f;
+  --color-signal-deep: #8ad91f;
+
+  --radius-panel: 18px;
+  --radius-tile: 6px;
+}
+
+@layer base {
+  :root {
+    --hairline: color-mix(in oklab, #f4f4f1 11%, transparent);
+    --hairline-strong: color-mix(in oklab, #f4f4f1 20%, transparent);
+  }
+
+  * {
+    border-color: var(--hairline);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-ink-800);
+    -webkit-tap-highlight-color: transparent;
+    color: var(--color-chalk);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.6;
+    overflow-x: hidden;
+    font-feature-settings: "ss01";
+    letter-spacing: -0.005em;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-variation-settings: "wdth" 112;
+    font-weight: 800;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: var(--color-signal);
+    color: var(--color-ink-900);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  input,
+  select,
+  button,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  /* iOS: <16px įvedimo laukuose priverčia puslapį priartėti */
+  @supports (-webkit-touch-callout: none) {
+    input,
+    select,
+    textarea {
+      font-size: 16px;
+    }
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+}
+
+/* Smulkios antraštėlės – apvalus šriftas, be „rašomosios mašinėlės“ įspūdžio */
+@utility label-mono {
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-chalk-faint);
+}
+
+@utility num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+@utility rule {
+  border-top: 1px solid var(--hairline);
+}
+
+/* ---- Atmosphere ---- */
+@utility grain {
+  position: relative;
+}
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Švelnus šviesos šlifas vietoj tinklelio */
+.sheen {
+  background-image: linear-gradient(
+    115deg,
+    transparent 0%,
+    color-mix(in oklab, #f4f4f1 3.5%, transparent) 42%,
+    transparent 72%
+  );
+}
+
+.spotlight {
+  background: radial-gradient(
+    120% 90% at 78% 8%,
+    color-mix(in oklab, #aeff3f 11%, transparent) 0%,
+    transparent 58%
+  );
+}
+
+/* ---- Buttons ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 52px;
+  padding: 0 1.6rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    background-color 180ms ease, color 180ms ease, box-shadow 220ms ease,
+    border-color 180ms ease;
+  white-space: nowrap;
+}
+.btn:active {
+  transform: translateY(1px) scale(0.99);
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary {
+  background: var(--color-signal);
+  color: var(--color-ink-900);
+  box-shadow: 0 0 0 0 color-mix(in oklab, #aeff3f 40%, transparent);
+}
+.btn-primary:hover:not(:disabled) {
+  background: #c2ff6b;
+  box-shadow: 0 10px 34px -12px color-mix(in oklab, #aeff3f 70%, transparent);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-chalk);
+  border: 1px solid var(--hairline-strong);
+}
+.btn-ghost:hover:not(:disabled) {
+  border-color: var(--color-signal);
+  color: var(--color-signal);
+}
+
+/* ---- Form controls ---- */
+.field {
+  width: 100%;
+  min-height: 46px;
+  background: var(--color-ink-700);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 0 1.05rem;
+  font-size: 16px;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+.field::placeholder {
+  color: var(--color-chalk-faint);
+}
+.field:hover {
+  border-color: var(--hairline-strong);
+}
+.field:focus {
+  border-color: var(--color-signal);
+  outline: none;
+  background: var(--color-ink-600);
+}
+.field-invalid,
+.field-invalid:focus {
+  border-color: #ff6b4a;
+}
+
+select.field {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a9aeb4' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1.05rem center;
+  padding-right: 2.8rem;
+}
+@media (max-width: 1023px) {
+  .field {
+    min-height: 56px;
+  }
+  .btn {
+    min-height: 54px;
+  }
+}
+
+/* Užklausos forma modaliniame lange */
+.vform-grid {
+  gap: 0.875rem;
+}
+
+/* Žemesniuose ekranuose (nešiojami 720–800 px) forma telpa be slinkimo */
+@media (min-width: 640px) and (max-height: 860px) {
+  .vform .field {
+    min-height: 44px;
+  }
+  .vform textarea.field {
+    min-height: 58px;
+  }
+  .vform .vform-grid {
+    gap: 0.6rem;
+  }
+  .vform .vform-photo {
+    min-height: 38px;
+    font-size: 12.5px;
+  }
+  .vform .vform-note {
+    display: none;
+  }
+  .vform .btn {
+    min-height: 48px;
+  }
+  .vform-head {
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
+  }
+}
+
+select.field option {
+  background: var(--color-ink-700);
+  color: var(--color-chalk);
+}
+
+/* Choice tiles — the form's signature control */
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  min-height: 60px;
+  padding: 0 1.1rem;
+  text-align: left;
+  background: var(--color-ink-700);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15.5px;
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease,
+    transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.choice:hover {
+  border-color: var(--hairline-strong);
+  background: var(--color-ink-600);
+}
+.choice[aria-pressed="true"] {
+  border-color: var(--color-signal);
+  background: color-mix(in oklab, #aeff3f 9%, var(--color-ink-700));
+  color: #ddff9d;
+}
+.choice[aria-pressed="true"] .choice-dot {
+  background: var(--color-signal);
+  border-color: var(--color-signal);
+}
+.choice-dot {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--hairline-strong);
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+/* ---- Reveal on scroll ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 700ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Marquee strip */
+@keyframes slide-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: slide-x 34s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+@keyframes sweep {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}
