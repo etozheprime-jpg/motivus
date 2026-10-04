@@ -16,5 +16,5 @@ jis automatiškai pakeičia placeholder'į.
 Stilius: tamsus fonas, šoninė arba 3/4 perspektyva, šalti atšvaitai,
 be ryškių logotipų ir be registracijos numerių (duomenų apsauga).
 
-`og-motivus.jpg` sugeneruotas iš `public/og-source.html` — atidarykite jį
+`og-motivus.jpg` sugeneruotas iš `tools/og-source.html` — atidarykite jį
 naršyklėje 1200×630 lange ir padarykite ekrano nuotrauką, jei norite atnaujinti.

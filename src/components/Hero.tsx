@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, ChevronDown, Phone, Volume2, VolumeX } from "lucide-react";
+import { ArrowRight, ChevronDown, Phone, Play, Volume2, VolumeX } from "lucide-react";
 import { BUSINESS } from "../lib/content";
 import Messengers from "./Messengers";
 import { useFormModal } from "../lib/formModal";
@@ -8,23 +8,44 @@ export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
   const [ready, setReady] = useState(false);
+  const [playing, setPlaying] = useState(false);
   const { openForm } = useFormModal();
+
+  /**
+   * Taupymo režimu ar lėtu ryšiu 8,5 MB vaizdo įrašo neatsisiunčiame —
+   * rodome tik pirmą kadrą (poster), o paleisti galima mygtuku.
+   */
+  const [lowData] = useState(() => {
+    if (typeof navigator === "undefined") return false;
+    const c = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } })
+      .connection;
+    return Boolean(c?.saveData) || /^(slow-)?2g$/.test(c?.effectiveType ?? "");
+  });
 
   useEffect(() => {
     const v = videoRef.current;
-    if (!v) return;
+    if (!v || lowData) return;
     // Autoplay leidžiamas tik be garso – todėl garsą įjungia pats lankytojas.
     v.muted = true;
-    const start = () => v.play().catch(() => undefined);
+    const start = () => {
+      if (!document.hidden) v.play().catch(() => undefined);
+    };
     start();
     // iOS kartais sustabdo įrašą grįžus į skirtuką
     document.addEventListener("visibilitychange", start);
     return () => document.removeEventListener("visibilitychange", start);
-  }, []);
+  }, [lowData]);
 
-  const toggleSound = () => {
+  const onVideoButton = () => {
     const v = videoRef.current;
     if (!v) return;
+    if (!playing) {
+      // Pirmas paspaudimas taupymo režimu – tiesiog paleidžia įrašą (be garso).
+      v.muted = true;
+      setMuted(true);
+      v.play().catch(() => undefined);
+      return;
+    }
     const next = !muted;
     v.muted = next;
     if (!next) v.play().catch(() => undefined);
@@ -38,16 +59,19 @@ export default function Hero() {
     >
       <video
         ref={videoRef}
-        className={`absolute inset-0 -z-20 h-full w-full bg-ink-900 object-cover object-[58%_center] saturate-[0.9] transition-opacity duration-[900ms] ${
-          ready ? "opacity-100" : "opacity-0"
+        className={`absolute inset-0 -z-20 h-full w-full bg-ink-900 object-cover object-[58%_center] saturate-[0.9] transition-opacity duration-500 ${
+          ready || lowData ? "opacity-100" : "opacity-70"
         }`}
         src={`${import.meta.env.BASE_URL}hero.mp4`}
-        autoPlay
+        poster={`${import.meta.env.BASE_URL}images/hero-poster.jpg`}
+        autoPlay={!lowData}
         loop
         muted
         playsInline
-        preload="auto"
+        preload={lowData ? "none" : "metadata"}
         onCanPlay={() => setReady(true)}
+        onPlaying={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
         tabIndex={-1}
       />
 
@@ -124,12 +148,24 @@ export default function Hero() {
       {/* Garso jungiklis */}
       <button
         type="button"
-        onClick={toggleSound}
-        aria-pressed={!muted}
-        aria-label={muted ? "Įjungti vaizdo įrašo garsą" : "Išjungti vaizdo įrašo garsą"}
+        onClick={onVideoButton}
+        aria-pressed={playing ? !muted : undefined}
+        aria-label={
+          !playing
+            ? "Paleisti vaizdo įrašą"
+            : muted
+              ? "Įjungti vaizdo įrašo garsą"
+              : "Išjungti vaizdo įrašo garsą"
+        }
         className="absolute bottom-5 left-5 z-10 grid h-11 w-11 place-items-center rounded-full border border-[color-mix(in_oklab,#f4f4f1_22%,transparent)] bg-ink-900/60 text-chalk-dim backdrop-blur-md transition-colors hover:border-signal hover:text-signal lg:bottom-8 lg:left-8 lg:h-12 lg:w-12"
       >
-        {muted ? <VolumeX size={18} strokeWidth={2.2} /> : <Volume2 size={18} strokeWidth={2.2} />}
+        {!playing ? (
+          <Play size={18} strokeWidth={2.2} />
+        ) : muted ? (
+          <VolumeX size={18} strokeWidth={2.2} />
+        ) : (
+          <Volume2 size={18} strokeWidth={2.2} />
+        )}
       </button>
     </section>
   );
