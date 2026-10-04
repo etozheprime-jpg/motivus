@@ -92,6 +92,9 @@ Atidarykite naršyklėje ir patikrinkite kiekvieną punktą:
 - [ ] `https://motivus.lt/paslaugu-teikimo-salygos/` – atsidaro
 - [ ] `https://motivus.lt/duk/` – permeta į pagrindinį puslapį (senas adresas)
 - [ ] `https://motivus.lt/neegzistuoja` – rodo MOTIVUS 404 puslapį
+- [ ] **Slapukų juosta** pasirodo pirmą kartą apsilankius; paspaudus „Tik
+      būtinieji“ arba „Sutinku su visais“ ji dingsta ir daugiau nerodoma
+- [ ] Poraštėje „Slapukų nustatymai“ atidaro juostą iš naujo
 - [ ] **Forma**: užpildykite testinę užklausą ir patikrinkite, ar laiškas
       atėjo į `$TO` dėžutę (patikrinkite ir šlamšto aplanką)
 - [ ] Forma su 1–2 nuotraukomis – nuotraukos turi ateiti laiške kaip priedai

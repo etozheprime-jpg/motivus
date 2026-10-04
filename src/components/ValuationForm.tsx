@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { AlertCircle, ArrowRight, Check, ImagePlus, Loader2, Phone, Trash2 } from "lucide-react";
 import Combobox from "./Combobox";
@@ -52,6 +52,14 @@ export default function ValuationForm() {
   const fileRef = useRef<HTMLInputElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
+  // Peržiūros nuorodos gyvuoja tik tol, kol atviras langas.
+  const photosRef = useRef(photos);
+  photosRef.current = photos;
+  useEffect(
+    () => () => photosRef.current.forEach((p) => URL.revokeObjectURL(p.url)),
+    [],
+  );
+
   const set = <K extends FieldKey>(k: K, v: Data[K]) => {
     setData((d) => ({ ...d, [k]: v }));
     setErrors((e) => (e[k] ? { ...e, [k]: undefined } : e));
@@ -67,7 +75,10 @@ export default function ValuationForm() {
     else if (!Number.isFinite(Number(d.desiredPrice.replace(/\s/g, ""))))
       e.desiredPrice = "Kaina turi būti skaičius.";
     if (d.city.trim().length < 2) e.city = "Nurodykite miestą.";
-    if (d.phone.replace(/\D/g, "").length < 8) e.phone = "Įveskite telefono numerį.";
+    // Ta pati taisyklė kaip api/lead.php – kitaip forma praleistų tai,
+    // ką serveris atmestų.
+    if (d.phone.replace(/\D/g, "").length < 8 || !/^[0-9+()\s-]{6,20}$/.test(d.phone.trim()))
+      e.phone = "Įveskite telefono numerį.";
     return e;
   }
 

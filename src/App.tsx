@@ -11,6 +11,7 @@ import FinalCta from "./components/FinalCta";
 import Footer from "./components/Footer";
 import MobileBar from "./components/MobileBar";
 import FormModal from "./components/FormModal";
+import CookieConsent from "./components/CookieConsent";
 import { FormModalProvider } from "./lib/formModal";
 import { useReveal } from "./lib/useReveal";
 
@@ -34,6 +35,7 @@ export default function App() {
       <Footer />
       <MobileBar />
       <FormModal />
+      <CookieConsent />
     </FormModalProvider>
   );
 }

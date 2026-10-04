@@ -4,6 +4,7 @@ import type { LegalBlock, LegalDoc } from "../lib/legal";
 import { FormModalProvider } from "../lib/formModal";
 import { url } from "../lib/url";
 import FormModal from "./FormModal";
+import CookieConsent from "./CookieConsent";
 import LegalHeader from "./LegalHeader";
 import Footer from "./Footer";
 
@@ -163,6 +164,7 @@ export default function LegalPage({ doc }: { doc: LegalDoc }) {
       <Article doc={doc} />
       <Footer />
       <FormModal />
+      <CookieConsent />
     </FormModalProvider>
   );
 }

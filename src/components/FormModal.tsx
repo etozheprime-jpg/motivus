@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import ValuationForm from "./ValuationForm";
 import { useFormModal } from "../lib/formModal";
@@ -44,7 +44,9 @@ export default function FormModal() {
 
     document.addEventListener("keydown", onKey);
     const t = window.setTimeout(() => {
-      panelRef.current?.querySelector<HTMLElement>("input, select, textarea")?.focus();
+      panelRef.current
+        ?.querySelector<HTMLElement>("input, select, textarea")
+        ?.focus();
     }, 220);
 
     return () => {
@@ -56,57 +58,57 @@ export default function FormModal() {
     };
   }, [open, closeForm]);
 
+  if (!open) return null;
+
+  /**
+   * Be AnimatePresence išėjimo animacijos. Jei ji neužbaigiama (fone atidarytas
+   * skirtukas, energijos taupymas, droselinamas requestAnimationFrame), dialogas
+   * liktų DOM'e ir uždengtų visą puslapį. Uždarymas privalo būti besąlygiškas.
+   */
   return (
-    <AnimatePresence>
-      {open && (
-        /* Tiesioginis AnimatePresence vaikas privalo būti motion elementas su key –
-           kitaip išėjimo animacija nepaleidžiama ir dialogas lieka DOM'e. */
-        <motion.div
-          key="form-modal"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.22 }}
-          className="fixed inset-0 z-[70] flex items-end justify-center sm:items-center sm:p-6"
-        >
-          <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.22 }}
+      className="fixed inset-0 z-[70] flex items-end justify-center sm:items-center sm:p-6"
+    >
+      <div
+        onClick={closeForm}
+        aria-hidden="true"
+        className="absolute inset-0 bg-ink-900/80 backdrop-blur-sm"
+      />
+
+      <motion.div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Automobilio įvertinimo užklausa"
+        initial={{ y: 40, scale: 0.985 }}
+        animate={{ y: 0, scale: 1 }}
+        transition={{ duration: 0.28, ease: [0.2, 0.8, 0.2, 1] }}
+        className="relative flex max-h-[92svh] w-full flex-col overflow-hidden rounded-t-[26px] bg-ink-800 shadow-[0_40px_120px_-30px_rgba(0,0,0,0.95)] sm:max-h-[90svh] sm:max-w-[640px] sm:rounded-[26px] sm:border sm:border-[color-mix(in_oklab,#f4f4f1_20%,transparent)]"
+      >
+        <div className="vform-head flex flex-none items-center justify-between gap-4 px-5 pb-3 pt-5 sm:px-7 sm:pt-6">
+          <h2 className="text-[clamp(1.25rem,4vw,1.6rem)]">
+            Sužinokite automobilio kainą
+          </h2>
+          <button
+            type="button"
             onClick={closeForm}
-            aria-hidden="true"
-            className="absolute inset-0 bg-ink-900/80 backdrop-blur-sm"
-          />
-
-          <motion.div
-            ref={panelRef}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Automobilio įvertinimo užklausa"
-            initial={{ y: 40, scale: 0.985 }}
-            animate={{ y: 0, scale: 1 }}
-            exit={{ y: 24, scale: 0.99 }}
-            transition={{ duration: 0.28, ease: [0.2, 0.8, 0.2, 1] }}
-            className="relative flex max-h-[92svh] w-full flex-col overflow-hidden rounded-t-[26px] bg-ink-800 shadow-[0_40px_120px_-30px_rgba(0,0,0,0.95)] sm:max-h-[90svh] sm:max-w-[640px] sm:rounded-[26px] sm:border sm:border-[color-mix(in_oklab,#f4f4f1_20%,transparent)]"
+            aria-label="Uždaryti"
+            className="grid h-11 w-11 flex-none place-items-center rounded-full border border-[color-mix(in_oklab,#f4f4f1_20%,transparent)] text-chalk-dim transition-colors hover:border-signal hover:text-signal"
           >
-            <div className="vform-head flex flex-none items-center justify-between gap-4 px-5 pb-3 pt-5 sm:px-7 sm:pt-6">
-              <h2 className="text-[clamp(1.25rem,4vw,1.6rem)]">Sužinokite automobilio kainą</h2>
-              <button
-                type="button"
-                onClick={closeForm}
-                aria-label="Uždaryti"
-                className="grid h-11 w-11 flex-none place-items-center rounded-full border border-[color-mix(in_oklab,#f4f4f1_20%,transparent)] text-chalk-dim transition-colors hover:border-signal hover:text-signal"
-              >
-                <X size={19} strokeWidth={2.3} />
-              </button>
-            </div>
+            <X size={19} strokeWidth={2.3} />
+          </button>
+        </div>
 
-            {/* Mobiliajame – „grabber“, kad būtų aišku, jog langas slenkamas */}
-            <div className="mx-auto mb-1 h-1 w-10 flex-none rounded-full bg-[color-mix(in_oklab,#f4f4f1_18%,transparent)] sm:hidden" />
+        {/* Mobiliajame – „grabber“, kad būtų aišku, jog langas slenkamas */}
+        <div className="mx-auto mb-1 h-1 w-10 flex-none rounded-full bg-[color-mix(in_oklab,#f4f4f1_18%,transparent)] sm:hidden" />
 
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-[max(20px,env(safe-area-inset-bottom))] sm:px-7 sm:pb-7">
-              <ValuationForm />
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-[max(20px,env(safe-area-inset-bottom))] sm:px-7 sm:pb-7">
+          <ValuationForm />
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }

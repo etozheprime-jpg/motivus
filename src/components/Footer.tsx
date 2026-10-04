@@ -4,6 +4,7 @@ import Wordmark from "./Wordmark";
 import Messengers from "./Messengers";
 import { useFormModal } from "../lib/formModal";
 import { isHome, url } from "../lib/url";
+import { openConsentSettings } from "../lib/consent";
 
 export default function Footer() {
   const { openForm } = useFormModal();
@@ -104,6 +105,15 @@ export default function Footer() {
                   </a>
                 </li>
               ))}
+              <li>
+                <button
+                  type="button"
+                  onClick={openConsentSettings}
+                  className="block py-1.5 text-left text-[15px] text-chalk-dim transition-colors hover:text-signal"
+                >
+                  Slapukų nustatymai
+                </button>
+              </li>
             </ul>
             <button type="button" onClick={openForm} className="btn btn-primary mt-7 !min-h-[48px] !px-5 !text-[14px]">
               Gauti pasiūlymą

@@ -147,7 +147,7 @@ export const PRIVACY: LegalDoc = {
         },
         {
           type: "p",
-          text: "Naudodami svetainę Jūs sutinkate su slapukų naudojimu. Savo sutikimą galite bet kada pakeisti naršyklės nustatymuose arba per slapukų juostos nustatymus.",
+          text: "Neprivalomi slapukai (analitiniai ir reklaminiai) įjungiami tik Jums aiškiai sutikus slapukų juostoje. Savo pasirinkimą galite bet kada pakeisti paspaudę „Slapukų nustatymai“ svetainės poraštėje arba išvalę duomenis naršyklės nustatymuose.",
         },
       ],
     },
@@ -217,7 +217,7 @@ export const COOKIES: LegalDoc = {
           type: "ul",
           items: [
             "Kai pirmą kartą apsilankote svetainėje, parodysime slapukų juostą, kur galėsite pasirinkti, kokius slapukus leidžiate naudoti.",
-            "Savo pasirinkimus galite bet kada pakeisti per slapukų nustatymų mygtuką svetainėje arba savo naršyklės nustatymuose.",
+            "Savo pasirinkimus galite bet kada pakeisti paspaudę „Slapukų nustatymai“ svetainės poraštėje arba savo naršyklės nustatymuose.",
             "Galite ištrinti jau įrašytus slapukus savo naršyklėje.",
           ],
         },

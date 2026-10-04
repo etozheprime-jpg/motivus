@@ -46,10 +46,18 @@ export function useReveal() {
     pending.forEach((el) => io.observe(el));
 
     // Atsarginis variantas, jei stebėtojas niekada nesuveikia.
+    // Sustoja, kai nebelieka ko rodyti – kitaip intervalas suktųsi visą laiką.
+    let left = pending.slice();
     const failsafe = window.setInterval(() => {
-      pending.forEach((el) => {
-        if (!el.classList.contains("is-in") && inView(el)) show(el);
+      left = left.filter((el) => {
+        if (el.classList.contains("is-in")) return false;
+        if (inView(el)) {
+          show(el);
+          return false;
+        }
+        return true;
       });
+      if (!left.length) window.clearInterval(failsafe);
     }, 600);
 
     return () => {

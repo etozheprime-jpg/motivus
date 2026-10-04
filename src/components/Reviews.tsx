@@ -1,4 +1,4 @@
-import { Star } from "lucide-react";
+import { Quote } from "lucide-react";
 import { REVIEWS } from "../lib/content";
 import { SectionLabel } from "./ui";
 
@@ -20,11 +20,7 @@ export default function Reviews() {
               className="reveal flex flex-col rounded-panel border border-[color-mix(in_oklab,#f4f4f1_11%,transparent)] bg-ink-700/55 p-6 sm:p-7"
               style={{ "--reveal-delay": `${i * 110}ms` } as React.CSSProperties}
             >
-              <div className="flex gap-1" aria-label="Penkios žvaigždutės iš penkių">
-                {Array.from({ length: 5 }).map((_, s) => (
-                  <Star key={s} size={15} className="fill-signal text-signal" strokeWidth={0} />
-                ))}
-              </div>
+              <Quote size={20} strokeWidth={2.2} className="text-signal/70" aria-hidden="true" />
               <blockquote className="mt-5 flex-1 text-[16px] leading-[1.68] text-chalk">
                 „{r.text}“
               </blockquote>

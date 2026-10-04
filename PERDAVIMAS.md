@@ -19,8 +19,28 @@ ir kaip viską prižiūrėti.
 | Mobilioji ir planšetės versijos | ✅ |
 | Title, meta description, Open Graph, favicon, robots.txt, sitemap.xml | ✅ |
 | Struktūriniai duomenys: AutomotiveBusiness + LocalBusiness + FAQPage | ✅ |
+| Slapukų sutikimo juosta (BDAR, su kategorijomis) | ✅ |
+| Saugumo antraštės: HSTS, CSP, X-Frame-Options | ✅ |
 | 404 puslapis | ✅ |
 | Peržiūros adreso apsauga nuo indeksavimo | ✅ |
+
+
+### 1.1. Slapukų juosta
+
+Svetainėje veikia sutikimo juosta su atskiromis kategorijomis (būtinieji,
+analitiniai, reklaminiai, funkciniai). Mygtukai „Tik būtinieji“ ir „Sutinku su
+visais“ yra vienodo svorio – to reikalauja BDAR. Sprendimas saugomas naršyklėje,
+todėl juosta rodoma tik kartą; pakeisti galima bet kada per „Slapukų nustatymai“
+poraštėje.
+
+**Kol kas svetainėje nėra nei Google Analytics, nei Meta Pixel.** Juos prijungus
+kodą rašykite TIK faile `src/lib/consent.ts`, funkcijoje `applyConsent()` – tik
+taip sutikimas bus tikrai gerbiamas. Ten jau paruoštas Google Consent Mode v2
+signalas. Taip pat į `public/.htaccess` Content-Security-Policy įrašykite naujų
+scenarijų domenus, kitaip naršyklė juos užblokuos.
+
+Pakeitus slapukų politikos esmę, faile `src/lib/consent.ts` padidinkite
+`CONSENT_VERSION` – tada visų lankytojų bus paklausta iš naujo.
 
 ---
 
