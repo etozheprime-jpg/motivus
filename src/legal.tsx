@@ -9,7 +9,7 @@ const slug = document.body.dataset.doc ?? "";
 const doc = LEGAL_DOCS[slug];
 
 if (!doc) {
-  window.location.replace("/");
+  window.location.replace(import.meta.env.BASE_URL);
 } else {
   createRoot(document.getElementById("root")!).render(
     <StrictMode>

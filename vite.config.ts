@@ -2,9 +2,12 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
-// Puslapis serveruojamas iš domeno šaknies (motivus.lt), todėl keliai – absoliutūs.
+// Gamyboje (Hostinger) puslapis gyvena domeno šaknyje, todėl base = "/".
+// GitHub Pages peržiūrai workflow nustato VITE_BASE=/motivus/.
+const base = process.env.VITE_BASE || "/";
+
 export default defineConfig({
-  base: "/",
+  base,
   plugins: [react(), tailwindcss()],
   build: {
     target: "es2020",

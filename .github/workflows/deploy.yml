@@ -24,7 +24,12 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      # Peržiūra gyvena pakatalogyje, o užklausų PHP ten neveikia,
+      # todėl forma paliekama demo režimu. Gamybinė sandara – domeno šaknyje.
       - run: npm run build
+        env:
+          VITE_BASE: /motivus/
+          VITE_LEAD_ENDPOINT: ""
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

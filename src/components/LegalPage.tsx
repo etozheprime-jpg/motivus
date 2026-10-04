@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { LEGAL } from "../lib/content";
 import type { LegalBlock, LegalDoc } from "../lib/legal";
 import { FormModalProvider } from "../lib/formModal";
+import { url } from "../lib/url";
 import FormModal from "./FormModal";
 import LegalHeader from "./LegalHeader";
 import Footer from "./Footer";
@@ -112,7 +113,7 @@ function Article({ doc }: { doc: LegalDoc }) {
             {LEGAL.filter((l) => !l.href.includes(doc.slug)).map((l) => (
               <a
                 key={l.href}
-                href={l.href}
+                href={url(l.href)}
                 className="text-[15px] font-semibold text-chalk-dim underline-offset-4 transition-colors hover:text-signal hover:underline"
               >
                 {l.label} →

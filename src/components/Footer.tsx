@@ -3,12 +3,13 @@ import { BUSINESS, LEGAL, NAV } from "../lib/content";
 import Wordmark from "./Wordmark";
 import Messengers from "./Messengers";
 import { useFormModal } from "../lib/formModal";
+import { isHome, url } from "../lib/url";
 
 export default function Footer() {
   const { openForm } = useFormModal();
   // Teisiniuose puslapiuose sekcijų nuorodos turi grąžinti į pagrindinį puslapį.
-  const onHome = typeof window === "undefined" || window.location.pathname === "/";
-  const sectionHref = (hash: string) => (onHome ? hash : `/${hash}`);
+  const onHome = isHome();
+  const sectionHref = (hash: string) => (onHome ? hash : url(hash));
   return (
     <footer
       id="kontaktai"
@@ -98,7 +99,7 @@ export default function Footer() {
             <ul className="mt-3 space-y-0.5">
               {LEGAL.map((l) => (
                 <li key={l.href}>
-                  <a href={l.href} className="block py-1.5 text-[15px] text-chalk-dim transition-colors hover:text-signal">
+                  <a href={url(l.href)} className="block py-1.5 text-[15px] text-chalk-dim transition-colors hover:text-signal">
                     {l.label}
                   </a>
                 </li>
