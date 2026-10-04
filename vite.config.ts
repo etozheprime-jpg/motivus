@@ -6,5 +6,17 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   base: "/",
   plugins: [react(), tailwindcss()],
-  build: { target: "es2020" },
+  build: {
+    target: "es2020",
+    // Teisiniai puslapiai – atskiri HTML įėjimo taškai, kad turėtų realius
+    // adresus, savo meta žymas ir būtų indeksuojami be JS maršrutizatoriaus.
+    rollupOptions: {
+      input: {
+        main: "index.html",
+        privacy: "privatumo-politika/index.html",
+        cookies: "slapuku-politika/index.html",
+        terms: "paslaugu-teikimo-salygos/index.html",
+      },
+    },
+  },
 });

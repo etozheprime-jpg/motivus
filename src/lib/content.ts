@@ -14,10 +14,9 @@ export const BUSINESS = {
     { days: "I–V", time: "08:00–20:00" },
     { days: "VI–VII", time: "09:00–19:00" },
   ],
-  social: [
-    { label: "Facebook", href: "https://www.facebook.com/" },
-    { label: "Instagram", href: "https://www.instagram.com/" },
-  ],
+  // Tik realiai egzistuojantys profiliai. Facebook nuoroda senojoje
+  // svetainėje buvo tuščia – ją pridėti, kai užsakovas pateiks adresą.
+  social: [{ label: "Instagram", href: "https://www.instagram.com/motivus_lt" }],
 };
 
 /**
@@ -149,7 +148,7 @@ export const FAQ = [
 ];
 
 export const LEGAL = [
-  { label: "Privatumo politika", href: "/privatumo-politika" },
-  { label: "Slapukų politika", href: "/slapuku-politika" },
-  { label: "Paslaugų teikimo sąlygos", href: "/paslaugu-teikimo-salygos" },
+  { label: "Privatumo politika", href: "/privatumo-politika/" },
+  { label: "Slapukų politika", href: "/slapuku-politika/" },
+  { label: "Paslaugų teikimo sąlygos", href: "/paslaugu-teikimo-salygos/" },
 ];

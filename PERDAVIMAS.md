@@ -44,17 +44,31 @@ Po pakeitimo — perkompiliuoti (`npm run build`).
 
 ### 2.2. Teisiniai puslapiai
 
-Poraštėje yra trys nuorodos, kurių puslapių **dar nėra** — jie duos 404:
+Trys teisiniai puslapiai **sukurti** ir veikia:
 
-- `/privatumo-politika`
-- `/slapuku-politika`
-- `/paslaugu-teikimo-salygos`
+- `/privatumo-politika/`
+- `/slapuku-politika/`
+- `/paslaugu-teikimo-salygos/`
 
-Reikia arba sukurti šiuos puslapius, arba pašalinti nuorodas iš
-`src/lib/content.ts` → `LEGAL`. Teksto neberašėme sąmoningai — tai juridinis
-dokumentas, kurį turi patvirtinti įmonė.
+Tekstai perkelti iš senosios motivus.lt svetainės nekeičiant turinio prasmės.
+Juos redaguoti galima vienoje vietoje — `src/lib/legal.ts` (be kodo žinių).
 
-Sukūrus — įrašykite juos ir į `public/sitemap.xml`.
+**Prieš publikavimą būtina patikrinti su užsakovu:**
+
+1. Skyriuje „Taikytina teisė ir ginčų sprendimas“ senojoje svetainėje sakinys
+   nutrūksta ties žodžiais „pagal mūs“. Čia jis užbaigtas neutraliai
+   („...Lietuvos Respublikos teismuose teisės aktų nustatyta tvarka“) — formuluotę
+   turi patvirtinti įmonė arba teisininkas.
+2. Privatumo politikoje senojoje svetainėje įvardyta konkreti užklausų platforma.
+   Kadangi naujoje svetainėje formos integracija dar nenustatyta, tekste palikta
+   bendresnė formuluotė. Prijungus realų `VITE_LEAD_ENDPOINT`, platformą reikia
+   įvardyti tiksliai.
+3. Privatumo ir slapukų politikose minima slapukų juosta („cookie banner“).
+   Naujoje svetainėje slapukų juostos kol kas **nėra** — ją reikia arba įdiegti,
+   arba atitinkamai pakoreguoti tekstą.
+
+Puslapiai jau įrašyti į `public/sitemap.xml` ir turi savo `canonical`,
+Open Graph bei `schema.org` (WebPage + BreadcrumbList) žymas.
 
 ### 2.3. Slapukų sutikimas
 

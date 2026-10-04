@@ -6,6 +6,9 @@ import { useFormModal } from "../lib/formModal";
 
 export default function Footer() {
   const { openForm } = useFormModal();
+  // Teisiniuose puslapiuose sekcijų nuorodos turi grąžinti į pagrindinį puslapį.
+  const onHome = typeof window === "undefined" || window.location.pathname === "/";
+  const sectionHref = (hash: string) => (onHome ? hash : `/${hash}`);
   return (
     <footer
       id="kontaktai"
@@ -38,7 +41,10 @@ export default function Footer() {
             <ul className="mt-3 space-y-0.5">
               {NAV.map((n) => (
                 <li key={n.href}>
-                  <a href={n.href} className="block py-1.5 text-[15px] text-chalk-dim transition-colors hover:text-signal">
+                  <a
+                    href={sectionHref(n.href)}
+                    className="block py-1.5 text-[15px] text-chalk-dim transition-colors hover:text-signal"
+                  >
                     {n.label}
                   </a>
                 </li>
