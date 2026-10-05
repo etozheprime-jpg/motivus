@@ -69,7 +69,9 @@
     font-family: var(--font-display);
     font-variation-settings: "wdth" 112;
     font-weight: 800;
-    line-height: 0.98;
+    /* Lietuviškos raidės (ą, ę, į, ž, š) turi ilgus akcentus/uodegėles –
+       per mažas tarpas eilutėms leidžia jiems susiliesti. */
+    line-height: 1.08;
     letter-spacing: -0.03em;
     text-wrap: balance;
   }

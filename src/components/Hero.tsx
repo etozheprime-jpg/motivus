@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, ChevronDown, Phone, Play, Volume2, VolumeX } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronDown,
+  Phone,
+  Play,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
 import { BUSINESS } from "../lib/content";
 import Messengers from "./Messengers";
 import { useFormModal } from "../lib/formModal";
@@ -17,8 +24,11 @@ export default function Hero() {
    */
   const [lowData] = useState(() => {
     if (typeof navigator === "undefined") return false;
-    const c = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } })
-      .connection;
+    const c = (
+      navigator as Navigator & {
+        connection?: { saveData?: boolean; effectiveType?: string };
+      }
+    ).connection;
     return Boolean(c?.saveData) || /^(slow-)?2g$/.test(c?.effectiveType ?? "");
   });
 
@@ -76,7 +86,10 @@ export default function Hero() {
       />
 
       {/* Tamsinimas, kad tekstas liktų skaitomas bet kuriame kadre */}
-      <div className="absolute inset-0 -z-10 bg-ink-900/58" aria-hidden="true" />
+      <div
+        className="absolute inset-0 -z-10 bg-ink-900/58"
+        aria-hidden="true"
+      />
       <div
         className="absolute inset-0 -z-10"
         style={{
@@ -88,14 +101,17 @@ export default function Hero() {
       {/* Perėjimas į puslapio foną – be matomos siūlės */}
       <div
         className="absolute inset-x-0 bottom-0 -z-10 h-48"
-        style={{ background: "linear-gradient(to top, var(--color-ink-800), transparent)" }}
+        style={{
+          background:
+            "linear-gradient(to top, var(--color-ink-800), transparent)",
+        }}
         aria-hidden="true"
       />
 
       {/* Tekstas – centre ekrano */}
       <div className="relative flex flex-1 items-center justify-center px-5 lg:px-8">
         <div className="mx-auto w-full max-w-[1320px]">
-          <h1 className="reveal max-w-[18ch] text-[clamp(2.1rem,6vw,4.2rem)] drop-shadow-[0_2px_28px_rgba(0,0,0,0.7)]">
+          <h1 className="reveal max-w-[18ch] text-[clamp(2.1rem,6vw,4.2rem)] leading-[1.12] drop-shadow-[0_2px_28px_rgba(0,0,0,0.7)]">
             Parduokite automobilį greitai.
             <br />
             <span className="text-signal">Gaukite sąžiningą kainą.</span>
@@ -105,8 +121,9 @@ export default function Hero() {
             className="reveal mt-6 max-w-[52ch] text-[16.5px] leading-[1.6] text-chalk-dim sm:text-[18px]"
             style={{ "--reveal-delay": "90ms" } as React.CSSProperties}
           >
-            Įvertiname automobilį per kelias minutes, sutvarkome visus formalumus ir pasirūpiname
-            išgabenimu. Superkame tvarkingus, su defektais, daužtus ir nevažiuojančius.
+            Įvertiname automobilį per kelias minutes, sutvarkome visus
+            formalumus ir pasirūpiname išgabenimu. Superkame tvarkingus, su
+            defektais, daužtus ir nevažiuojančius.
           </p>
         </div>
       </div>
@@ -117,7 +134,11 @@ export default function Hero() {
           className="reveal flex w-full max-w-[460px] flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:items-center"
           style={{ "--reveal-delay": "160ms" } as React.CSSProperties}
         >
-          <button type="button" onClick={openForm} className="btn btn-ghost group !bg-ink-900/55 backdrop-blur-md">
+          <button
+            type="button"
+            onClick={openForm}
+            className="btn btn-ghost group !bg-ink-900/55 backdrop-blur-md"
+          >
             Pildyti užklausą
             <ArrowRight
               size={18}
