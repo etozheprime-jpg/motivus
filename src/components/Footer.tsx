@@ -99,12 +99,12 @@ export default function Footer() {
                   {BUSINESS.address}
                 </a>
                 {/* Navigacija vienu paspaudimu – telefone atsidaro programėlė. */}
-                <div className="mt-3 pl-[25px]">
+                <div className="mt-4">
                   <span className="label-mono !text-[9.5px] text-chalk-faint">
                     Naviguoti
                   </span>
                 </div>
-                <div className="mt-2 flex flex-wrap gap-2 pl-[25px]">
+                <div className="mt-2 flex flex-wrap gap-2">
                   <a
                     href={BUSINESS.maps.google}
                     target="_blank"
