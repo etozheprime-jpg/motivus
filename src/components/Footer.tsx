@@ -1,4 +1,4 @@
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Mail, MapPin, Navigation, Phone } from "lucide-react";
 import { BUSINESS, LEGAL, NAV } from "../lib/content";
 import Wordmark from "./Wordmark";
 import Messengers from "./Messengers";
@@ -21,7 +21,8 @@ export default function Footer() {
           <div>
             <Wordmark className="text-[24px] text-chalk [&_svg]:text-signal" />
             <p className="mt-4 max-w-[34ch] text-[15px] leading-[1.6] text-chalk-dim">
-              Automobilių supirkimas — greitai, patogiai ir sąžiningai visoje Lietuvoje.
+              Automobilių supirkimas — greitai, patogiai ir sąžiningai visoje
+              Lietuvoje.
             </p>
             <div className="mt-6 flex gap-2">
               {BUSINESS.social.map((s) => (
@@ -62,7 +63,11 @@ export default function Footer() {
                   href={BUSINESS.phoneHref}
                   className="flex items-center gap-2.5 num text-[15px] font-semibold transition-colors hover:text-signal"
                 >
-                  <Phone size={15} className="flex-none text-signal" strokeWidth={2.2} />
+                  <Phone
+                    size={15}
+                    className="flex-none text-signal"
+                    strokeWidth={2.2}
+                  />
                   {BUSINESS.phone}
                 </a>
               </li>
@@ -71,13 +76,62 @@ export default function Footer() {
                   href={`mailto:${BUSINESS.email}`}
                   className="flex items-center gap-2.5 text-[15px] text-chalk-dim transition-colors hover:text-signal"
                 >
-                  <Mail size={15} className="flex-none text-signal" strokeWidth={2.2} />
+                  <Mail
+                    size={15}
+                    className="flex-none text-signal"
+                    strokeWidth={2.2}
+                  />
                   {BUSINESS.email}
                 </a>
               </li>
-              <li className="flex items-start gap-2.5 text-[15px] text-chalk-dim">
-                <MapPin size={15} className="mt-1 flex-none text-signal" strokeWidth={2.2} />
-                {BUSINESS.address}
+              <li>
+                <a
+                  href={BUSINESS.maps.google}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-2.5 text-[15px] text-chalk-dim transition-colors hover:text-signal"
+                >
+                  <MapPin
+                    size={15}
+                    className="mt-1 flex-none text-signal"
+                    strokeWidth={2.2}
+                  />
+                  {BUSINESS.address}
+                </a>
+                {/* Navigacija vienu paspaudimu – telefone atsidaro programėlė. */}
+                <div className="mt-3 pl-[25px]">
+                  <span className="label-mono !text-[9.5px] text-chalk-faint">
+                    Naviguoti
+                  </span>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-2 pl-[25px]">
+                  <a
+                    href={BUSINESS.maps.google}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-h-[44px] items-center gap-2 rounded-full lg:min-h-[38px] border border-[color-mix(in_oklab,#f4f4f1_20%,transparent)] px-3.5 text-[13px] font-bold transition-colors hover:border-signal hover:text-signal"
+                  >
+                    <Navigation
+                      size={13}
+                      strokeWidth={2.4}
+                      className="text-signal"
+                    />
+                    Google Maps
+                  </a>
+                  <a
+                    href={BUSINESS.maps.waze}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-h-[44px] items-center gap-2 rounded-full lg:min-h-[38px] border border-[color-mix(in_oklab,#f4f4f1_20%,transparent)] px-3.5 text-[13px] font-bold transition-colors hover:border-signal hover:text-signal"
+                  >
+                    <Navigation
+                      size={13}
+                      strokeWidth={2.4}
+                      className="text-signal"
+                    />
+                    Waze
+                  </a>
+                </div>
               </li>
             </ul>
 
@@ -87,7 +141,10 @@ export default function Footer() {
             <h2 className="label-mono mt-7">Darbo laikas</h2>
             <ul className="mt-3 space-y-1.5">
               {BUSINESS.hours.map((h) => (
-                <li key={h.days} className="flex gap-3 num text-[14px] text-chalk-dim">
+                <li
+                  key={h.days}
+                  className="flex gap-3 num text-[14px] text-chalk-dim"
+                >
                   <span className="w-16 flex-none text-chalk">{h.days}</span>
                   {h.time}
                 </li>
@@ -100,7 +157,10 @@ export default function Footer() {
             <ul className="mt-3 space-y-0.5">
               {LEGAL.map((l) => (
                 <li key={l.href}>
-                  <a href={url(l.href)} className="block py-1.5 text-[15px] text-chalk-dim transition-colors hover:text-signal">
+                  <a
+                    href={url(l.href)}
+                    className="block py-1.5 text-[15px] text-chalk-dim transition-colors hover:text-signal"
+                  >
                     {l.label}
                   </a>
                 </li>
@@ -115,7 +175,11 @@ export default function Footer() {
                 </button>
               </li>
             </ul>
-            <button type="button" onClick={openForm} className="btn btn-primary mt-7 !min-h-[48px] !px-5 !text-[14px]">
+            <button
+              type="button"
+              onClick={openForm}
+              className="btn btn-primary mt-7 !min-h-[48px] !px-5 !text-[14px]"
+            >
               Gauti pasiūlymą
             </button>
           </div>
@@ -123,7 +187,8 @@ export default function Footer() {
 
         <div className="mt-14 flex flex-col gap-2 border-t border-[color-mix(in_oklab,#f4f4f1_11%,transparent)] pt-6 text-[13px] text-chalk-faint sm:flex-row sm:items-center sm:justify-between">
           <p>
-            {new Date().getFullYear()} © {BUSINESS.legal}. Visos teisės saugomos.
+            {new Date().getFullYear()} © {BUSINESS.legal}. Visos teisės
+            saugomos.
           </p>
           <p className="num">Automobilių supirkimas Lietuvoje</p>
         </div>

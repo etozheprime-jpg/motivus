@@ -110,6 +110,20 @@ Jei bus pridėta Google Analytics / Meta Pixel, pagal GDPR reikės slapukų
 sutikimo juostos. Dabar svetainė **nenaudoja jokių analitikos ar sekimo
 slapukų**, todėl juostos nereikia.
 
+### 2.4a. Žemėlapio taškas (neprivaloma)
+
+Poraštėje adresas yra nuoroda, o po juo – mygtukai „Google Maps“ ir „Waze“.
+Jie veikia pagal adreso tekstą, todėl žemėlapis pats randa vietą.
+
+Struktūriniuose duomenyse (`index.html`) koordinačių sąmoningai nėra: ten buvusios
+rodė Vilniaus centrą, o Varnės g. yra Pilaitėje – apie 8 km nuo to taško.
+Klaidinga vieta vietinei paieškai kenkia labiau nei jokios. Tikslų tašką galima
+įrašyti iš įmonės Google Business Profile – tada į `index.html` grąžinkite:
+
+```json
+"geo": { "@type": "GeoCoordinates", "latitude": 54.xxxx, "longitude": 25.xxxx },
+```
+
 ### 2.4. Socialinių tinklų nuorodos
 
 ✅ Sutvarkyta. Poraštėje – tikri profiliai:

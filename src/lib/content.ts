@@ -10,6 +10,14 @@ export const BUSINESS = {
   phoneHref: "tel:+37063222228",
   email: "info@motivus.lt",
   address: "Varnės g. 2, Vilnius",
+  /**
+   * Navigacijos nuorodos. Naudojamas adreso tekstas, o ne koordinatės –
+   * žemėlapis pats randa tikslią vietą ir nereikia spėlioti taško.
+   */
+  maps: {
+    google: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Varnės g. 2, Vilnius, Lietuva")}`,
+    waze: `https://waze.com/ul?q=${encodeURIComponent("Varnės g. 2, Vilnius, Lietuva")}&navigate=yes`,
+  },
   hours: [
     { days: "I–V", time: "08:00–20:00" },
     { days: "VI–VII", time: "09:00–19:00" },
@@ -42,7 +50,11 @@ export const MESSENGERS = [
 export const NAV = [
   { label: "Pagrindinis", href: "#pagrindinis", short: "Pagrindinis" },
   { label: "Kodėl MOTIVUS?", href: "#kodel-motivus", short: "Kodėl MOTIVUS?" },
-  { label: "Kaip veikia supirkimo paslauga?", href: "#kaip-veikia", short: "Kaip veikia" },
+  {
+    label: "Kaip veikia supirkimo paslauga?",
+    href: "#kaip-veikia",
+    short: "Kaip veikia",
+  },
   { label: "DUK", href: "#duk", short: "DUK" },
   { label: "Kontaktai", href: "#kontaktai", short: "Kontaktai" },
 ];
