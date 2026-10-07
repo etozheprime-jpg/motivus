@@ -17,6 +17,24 @@ $LOG_DIR    = __DIR__ . '/../../motivus-leads';  // už public_html ribų
 $MAX_PHOTOS = 8;
 $MAX_BYTES  = 10 * 1024 * 1024;           // vienai nuotraukai
 
+// Slapti nustatymai (Telegram tokenas, webhook) laikomi ne čia, o už public_html
+// ribų faile motivus-config.php – žr. config.example.php. Jei jo nėra, naudojami
+// aukščiau nurodyti numatytieji adresai ir veikia tik laiškas.
+$cfg = ['to' => $TO, 'from' => $FROM, 'site' => $SITE, 'tg_token' => '', 'tg_chat' => '', 'webhook_url' => ''];
+$extCfg = __DIR__ . '/../../motivus-config.php';
+if (is_file($extCfg)) {
+    try {
+        $loaded = include $extCfg;
+        if (is_array($loaded)) {
+            $cfg = array_merge($cfg, $loaded);
+        }
+    } catch (Throwable $e) {
+        @error_log('[MOTIVUS] config: ' . $e->getMessage());
+    }
+}
+$TO   = $cfg['to'];
+$FROM = $cfg['from'];
+
 // ---------------------------------------------------------------------------
 
 header('Content-Type: application/json; charset=utf-8');
@@ -118,42 +136,59 @@ if (is_dir($LOG_DIR) && is_writable($LOG_DIR)) {
     }
 }
 
-/** Laiškas. */
-$lines = ["Nauja užklausa iš $SITE", str_repeat('-', 40), ''];
-foreach ($fields as $key => $label) {
-    $lines[] = $label . ': ' . ($data[$key] !== '' ? $data[$key] : '—');
+/**
+ * Pranešimai: laiškas su mygtukais, Telegram, webhook (notify.php).
+ * Failas įkeliamas try/catch bloke – bet kokia klaida jame neturi sustabdyti
+ * užklausos, todėl žemiau paliktas ir paprastas laiškas kaip atsarginis kelias.
+ */
+$notified = ['email' => false, 'telegram' => false, 'webhook' => false];
+try {
+    require_once __DIR__ . '/notify.php';
+    $notified = array_merge($notified, motivus_notify($cfg, $data, $photos, $fields));
+} catch (Throwable $e) {
+    @error_log('[MOTIVUS] notify: ' . $e->getMessage());
 }
-$lines[] = '';
-$lines[] = 'Nuotraukų: ' . count($photos);
-$lines[] = 'Gauta: ' . date('Y-m-d H:i:s');
-$text = implode("\n", $lines);
 
-$boundary = '=_' . bin2hex(random_bytes(12));
-$headers = implode("\r\n", [
-    'From: MOTIVUS <' . $FROM . '>',
-    'Reply-To: ' . $FROM,
-    'MIME-Version: 1.0',
-    'Content-Type: multipart/mixed; boundary="' . $boundary . '"',
-]);
-
-$body  = "--$boundary\r\n";
-$body .= "Content-Type: text/plain; charset=UTF-8\r\n";
-$body .= "Content-Transfer-Encoding: 8bit\r\n\r\n";
-$body .= $text . "\r\n";
-
-foreach ($photos as $p) {
-    $body .= "--$boundary\r\n";
-    $body .= 'Content-Type: ' . $p['mime'] . '; name="' . $p['name'] . "\"\r\n";
-    $body .= "Content-Transfer-Encoding: base64\r\n";
-    $body .= 'Content-Disposition: attachment; filename="' . $p['name'] . "\"\r\n\r\n";
-    $body .= chunk_split(base64_encode($p['body'])) . "\r\n";
-}
-$body .= "--$boundary--";
-
-$subject = '=?UTF-8?B?' . base64_encode('Užklausa: ' . $data['makeModel'] . ' — ' . $data['phone']) . '?=';
-$sent = @mail($TO, $subject, $body, $headers);
+$sent = $notified['email'];
 
 if (!$sent) {
+    /** Atsarginis paprastas laiškas (be mygtukų) – kaip buvo iki pranešimų modulio. */
+    $lines = ["Nauja užklausa iš $SITE", str_repeat('-', 40), ''];
+    foreach ($fields as $key => $label) {
+        $lines[] = $label . ': ' . ($data[$key] !== '' ? $data[$key] : '—');
+    }
+    $lines[] = '';
+    $lines[] = 'Nuotraukų: ' . count($photos);
+    $lines[] = 'Gauta: ' . date('Y-m-d H:i:s');
+    $text = implode("\n", $lines);
+
+    $boundary = '=_' . bin2hex(random_bytes(12));
+    $headers = implode("\r\n", [
+        'From: MOTIVUS <' . $FROM . '>',
+        'Reply-To: ' . $FROM,
+        'MIME-Version: 1.0',
+        'Content-Type: multipart/mixed; boundary="' . $boundary . '"',
+    ]);
+
+    $body  = "--$boundary\r\n";
+    $body .= "Content-Type: text/plain; charset=UTF-8\r\n";
+    $body .= "Content-Transfer-Encoding: 8bit\r\n\r\n";
+    $body .= $text . "\r\n";
+
+    foreach ($photos as $p) {
+        $body .= "--$boundary\r\n";
+        $body .= 'Content-Type: ' . $p['mime'] . '; name="' . $p['name'] . "\"\r\n";
+        $body .= "Content-Transfer-Encoding: base64\r\n";
+        $body .= 'Content-Disposition: attachment; filename="' . $p['name'] . "\"\r\n\r\n";
+        $body .= chunk_split(base64_encode($p['body'])) . "\r\n";
+    }
+    $body .= "--$boundary--";
+
+    $subject = '=?UTF-8?B?' . base64_encode('Užklausa: ' . $data['makeModel'] . ' — ' . $data['phone']) . '?=';
+    $sent = @mail($TO, $subject, $body, $headers);
+}
+
+if (!$sent && !$notified['telegram'] && !$notified['webhook']) {
     // Duomenys jau įrašyti į CSV, todėl užklausa neprarasta –
     // bet naudotojui pranešame sąžiningai.
     fail(500, 'Užklausos išsiųsti nepavyko. Paskambinkite +370 632 22228.');

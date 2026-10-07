@@ -80,6 +80,46 @@ tai atsarginė kopija, jei laiškas kada nors nepasiektų.
 
 ---
 
+## 4a. Pranešimai į Telegram ir laiškas su mygtukais
+
+Kai klientas pateikia užklausą, ji dabar:
+
+1. ateina **laišku su mygtukais** „Skambinti“, WhatsApp, Viber, SMS, Telegram –
+   paspaudus telefone iškart atsidaro skambutis ar pokalbis su klientu;
+2. (jei nustatysite) ateina ir **Telegram žinute** su tomis pačiomis nuorodomis
+   bei nuotraukomis;
+3. (jei nurodysite) persiunčiama į **Go High Level** per webhook.
+
+Telegram nustatymas (apie 5 min.):
+
+1. Telegram programoje atidarykite **@BotFather** → `/newbot` → pasirinkite
+   pavadinimą. Gausite **tokeną** (ilgas tekstas su dvitaškiu). Laikykite jį paslaptyje.
+2. Suraskite savo naująjį botą pagal vardą ir paspauskite **Start** (arba pridėkite botą
+   į grupę ir parašykite ten bet ką).
+3. Naršyklėje atidarykite `https://api.telegram.org/bot<TOKENAS>/getUpdates`
+   (vietoj `<TOKENAS>` įrašykite savo). Atsakyme raskite `"chat":{"id": ...}` –
+   tai **chat_id** (grupės numeris prasideda minusu).
+4. File Manager → viename lygyje **aukščiau** už `public_html` sukurkite failą
+   `motivus-config.php`, o jo turinį nukopijuokite iš `public_html/api/config.example.php`.
+   Užpildykite `tg_token` ir `tg_chat`. Keli gavėjai – per kablelį.
+5. Išsiųskite bandomąją užklausą ir patikrinkite, ar ji atėjo į Telegram.
+
+> **Raktų niekada nerašykite** į `lead.php`, `notify.php` ar `config.example.php`:
+> tie failai gali patekti į GitHub. Tik į `motivus-config.php`, kuris yra už
+> `public_html` ribų ir iš interneto nepasiekiamas.
+
+**Go High Level:** į `motivus-config.php` įrašykite `webhook_url` (Automations →
+Workflow → trigger „Inbound Webhook“). Siunčiamas JSON su laukais, telefonu
+tarptautiniu formatu (`phoneE164`) ir nuotraukų skaičiumi. Nuotraukos webhook
+nesiunčiamos – jos eina laišku ir Telegram.
+
+**WhatsApp.** Automatinis pranešimas *į* WhatsApp reikalauja oficialaus „WhatsApp
+Business Cloud API“ (Meta paskyra, patvirtintas verslas, patvirtintas žinučių
+šablonas). Tai atskiras nustatymas, todėl kol kas jo nėra: kontaktą su klientu
+WhatsApp galima pradėti vienu paspaudimu iš laiško ar Telegram žinutės.
+
+---
+
 ## 5. Patikrinimas
 
 Atidarykite naršyklėje ir patikrinkite kiekvieną punktą:
@@ -95,6 +135,9 @@ Atidarykite naršyklėje ir patikrinkite kiekvieną punktą:
 - [ ] **Slapukų juosta** pasirodo pirmą kartą apsilankius; paspaudus „Tik
       būtinieji“ arba „Sutinku su visais“ ji dingsta ir daugiau nerodoma
 - [ ] Poraštėje „Slapukų nustatymai“ atidaro juostą iš naujo
+- [ ] Gautame laiške veikia mygtukai: **Skambinti** (telefone iškviečia numerį)
+      ir **WhatsApp** (atidaro pokalbį su klientu)
+- [ ] Jei nustatytas Telegram – žinutė su nuotraukomis atėjo į jį
 - [ ] **Forma**: užpildykite testinę užklausą ir patikrinkite, ar laiškas
       atėjo į `$TO` dėžutę (patikrinkite ir šlamšto aplanką)
 - [ ] Forma su 1–2 nuotraukomis – nuotraukos turi ateiti laiške kaip priedai
